@@ -14,19 +14,25 @@ app.use(express.json())
 
 
 app.post('/api/signup', async (req, res) => {
-	console.log(req.body)
+	console.log(req.body);
 	try {
-		const newPassword = await bcrypt.hash(req.body.password, 10)
-		await User.create({
-			name: req.body.name,
-			email: req.body.email,
-			password: newPassword,
-		})
-		res.json({ status: 'ok' })
+	  const existingUser = await User.findOne({ email: req.body.email });
+	  if (existingUser) {
+		// Email already exists, return a 409 status code
+		return res.status(409).json({ status: 'error', error: 'Email id already exists' });
+	  }
+  
+	  const newPassword = await bcrypt.hash(req.body.password, 10);
+	  await User.create({
+		name: req.body.name,
+		email: req.body.email,
+		password: newPassword,
+	  });
+	  res.json({ status: 'ok' });
 	} catch (err) {
-		res.json({ status: 'error', error: 'Duplicate email' })
+	  res.json({ status: 'error', error: 'Something went wrong' });
 	}
-})
+  });
 
 app.post('/api/signin', async (req, res) => {
 	const user = await User.findOne({
