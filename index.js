@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8000
 
 app.use(cors(
 	{
-		origin:["https://code-camp-project-backend-2ph3.vercel.app/"],
+		origin:[],
 		methods:["POST","GET"],
 		credentials:true
 	}
