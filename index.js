@@ -5,6 +5,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 require('./db.js')
 const User = require('./models/user.model')
+const Certification =require('./models/certification.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const PORT = process.env.PORT || 8000
@@ -18,7 +19,6 @@ app.post('/api/signup', async (req, res) => {
 	try {
 	  const existingUser = await User.findOne({ email: req.body.email });
 	  if (existingUser) {
-		// Email already exists, return a 409 status code
 		return res.status(409).json({ status: 'error', error: 'Email id already exists' });
 	  }
   
@@ -59,6 +59,20 @@ app.post('/api/signin', async (req, res) => {
 	}
 });
 
+app.post('/api/register', async (req, res) => {
+	try {
+	  const { title } = req.body;
+	  const certification = new Certification({
+		title,
+	  });
+	  await certification.save();
+	  res.status(201).json({ message: 'Registered successfully' });
+	} catch (error) {
+	  console.error(error);
+	  res.status(500).json({ message: 'Registration failed' });
+	}
+  });
+  
 
 
 app.listen(PORT, () => {
