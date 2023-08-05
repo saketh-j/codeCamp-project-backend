@@ -10,9 +10,18 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const PORT = process.env.PORT || 8000
 
-app.use(cors())
+app.use(cors(
+	{
+		origin:["https://code-camp-project-backend-2ph3.vercel.app/"],
+		methods:["POST","GET"],
+		credentials:true
+	}
+))
 app.use(express.json())
 
+app.get("/",(req,res)=>{
+       res.json("hi")
+})
 
 app.post('/api/signup', async (req, res) => {
 	console.log(req.body);
