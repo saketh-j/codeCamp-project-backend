@@ -10,18 +10,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const PORT = process.env.PORT || 8000
 
-app.use(cors(
-	{
-		origin:[],
-		methods:["POST","GET"],
-		credentials:true
-	}
-))
+app.use(cors())
 app.use(express.json())
-
-app.get("/",(req,res)=>{
-       res.json("hi")
-})
 
 app.post('/api/signup', async (req, res) => {
 	console.log(req.body);
